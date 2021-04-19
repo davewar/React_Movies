@@ -32,7 +32,7 @@ const CustomPagination = ({page, setPage, numOfPages = 10 }) => {
                         <Pagination
                         count={numOfPages}
                         onChange={(e) => handlePageChange(e.target.textContent)}
-                            onClick={(e) => console.log(e.target)}    
+                            // onClick={(e) => console.log(e.target)}    
                         color="primary"
                         variant="outlined"
                         shape="rounded"

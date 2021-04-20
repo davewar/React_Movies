@@ -11,7 +11,7 @@ const useStyles = makeStyles({
         
         position: "fixed",
         right: 15,
-        top: 50,
+        top: 20,
         background: 'black',        
         color: 'white',
         zIndex: 100,

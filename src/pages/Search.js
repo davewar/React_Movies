@@ -1,8 +1,22 @@
-import {   Button,   createMuiTheme,  Tab,  Tabs,   TextField,   ThemeProvider, } from "@material-ui/core";
+import {   Button,   createMuiTheme,  Tab,  Tabs,   TextField,   ThemeProvider, makeStyles } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { useEffect, useState, useRef } from "react";
 import CustomPagination from "../Components/CustomPagination";
 import SingleContent from "../Components/SingleContent";
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+
+const useStyles = makeStyles({
+
+    toolbar:{
+        
+        position: "fixed",
+        right: 15,
+        top: 50,
+        background: 'black',        
+        color: 'white',
+        zIndex: 100,
+    },
+})
 
 const Search = () => {
 
@@ -14,6 +28,8 @@ const Search = () => {
         const [type, setType] = useState(0);
         const [searchText, setSearchText] = useState("");
         const isMounted = useRef(false);
+        const end = useRef(null)
+        const classes = useStyles()  
 
         const darkTheme = createMuiTheme({
             palette: {
@@ -24,7 +40,7 @@ const Search = () => {
             },
         });
 
-
+        //getData
     const fetchData = async ()=>{
 
               if(!setSearchText){
@@ -51,7 +67,7 @@ const Search = () => {
                             //err
                             if(resData.results.length === 0){
 
-                                setError("No items found")
+                                setError(true)
                                 setLoading(false)
                                 setData([])
                                 
@@ -66,7 +82,7 @@ const Search = () => {
 
                 } else{
 
-                     setError("No items found")
+                     setError(true)
                      setLoading(false)
                    
 
@@ -76,7 +92,7 @@ const Search = () => {
 
             }catch(err){
                  console.log(err.message);
-                setError("No items found")
+                setError(true)
                 setLoading(false)
 
             }
@@ -84,12 +100,20 @@ const Search = () => {
         }
 
 
+    //scroll to navigation page area
+        const endOfPage = ()=> {
 
+             end.current.scrollIntoView({
+                behavior: "smooth"                
+            })
+
+        }
 
 
 
 
   useEffect(() => {
+
     window.scroll(0, 0);
 
     if(!data && !searchText){
@@ -112,6 +136,9 @@ const Search = () => {
 
   return (
     <div>
+      
+         <span className="pageTitle">Search</span>
+
       <ThemeProvider theme={darkTheme}>
         <div className="search">
           <TextField
@@ -164,6 +191,24 @@ const Search = () => {
           {
             loading && <div>Loading .... </div>
           }
+
+          {
+            numOfPages > 1 && (
+
+                <Button className={classes.toolbar} variant="contained" color="default" onClick={endOfPage}
+              >
+
+                      <ArrowDownwardIcon />
+
+                </Button>
+
+            )
+
+          }
+
+
+
+
           {data &&
             data.map((c) => (
               <SingleContent
@@ -182,7 +227,13 @@ const Search = () => {
       </div>
 
       { (numOfPages > 1 && searchText && data) ? (
-        <CustomPagination setPage={setPage} numOfPages={numOfPages} />
+
+        <>
+
+          <div ref={end}></div>
+          <CustomPagination setPage={setPage} numOfPages={numOfPages} />
+
+        </>
       ): null}
 
     </div>

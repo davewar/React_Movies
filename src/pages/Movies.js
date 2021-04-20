@@ -1,9 +1,22 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import SingleContent from '../Components/SingleContent'
 import CustomPagination from '../Components/CustomPagination'
 import Genres from '../Components/Genres'
 import useGenre from '../hooks/useGenre'
+import { Button, makeStyles } from "@material-ui/core";
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 
+const useStyles = makeStyles({
+
+    toolbar:{        
+        position: "fixed",
+        right: 15,
+        top: 50,
+        background: 'black',        
+        color: 'white',
+        zIndex: 100,
+    },
+})
 
 const Movies = () => {
 
@@ -16,7 +29,12 @@ const Movies = () => {
         const [selectedGenres, setSelectedGenres] = useState([]);
         const [genres, setGenres] = useState([]);
         const genreforURL = useGenre(selectedGenres)
+        const end = useRef(null)
+        const classes = useStyles()  
 
+
+
+        //getdata
         const fetchData = async ()=>{
 
             try{
@@ -41,9 +59,10 @@ const Movies = () => {
 
                             //err
                             if(resData.success === "false" || resData.results.length === 0){
-
+                               
                                 setError(true)
                                 setLoading(false)
+                                setData([])
                                 // alert("Issue found. Please try again")
                                 return
 
@@ -72,6 +91,16 @@ const Movies = () => {
             }
 
         }
+
+        //scroll to navigation page area
+        const endOfPage = ()=> {
+
+             end.current.scrollIntoView({
+                behavior: "smooth"                
+            })
+
+        }
+
         
         useEffect(() => {
             window.scroll(0, 0);
@@ -80,21 +109,17 @@ const Movies = () => {
         }, [page, genreforURL])
 
 
-
-
+        
     return (
         <>
              {
                 loading && <div>Loading........</div>
             }
 
-            {
-                error && <div>Error with loading of page. Please refresh page.</div>
-            }
-
             <div>
 
-                 <span className="pageTitle">Movies</span>
+                    
+                 <span className="pageTitle">Genres</span>
 
                   <Genres 
                         type="movie"
@@ -105,7 +130,22 @@ const Movies = () => {
                         setPage={setPage}
                 />
 
-                <div style={style__trending}>
+                {
+                     numOfPages > 1 && (
+
+                         <Button className={classes.toolbar} variant="contained" color="default" onClick={endOfPage}
+                        >
+
+                                <ArrowDownwardIcon />
+
+                         </Button>
+
+                     )
+
+                }
+               
+
+                    <div style={style__trending}>
 
                     {
                     data && data.map((item) => (
@@ -122,9 +162,22 @@ const Movies = () => {
                     ))
                     }
                 </div>
+
+                {
+                error && <div>No results found.</div>
+                }
+
+                
+
                 {numOfPages > 1 && (
-                <CustomPagination setPage={setPage} page={Number(page)} numOfPages={numOfPages} />
+
+                    <>
+                        <div ref={end}></div>
+                        <CustomPagination setPage={setPage} page={Number(page)} numOfPages={numOfPages} />
+                    </>
                  )}
+
+                 
             </div>    
 
 
@@ -139,3 +192,5 @@ const style__trending = {
   flexWrap: 'wrap',
   justifyContent: 'space-around',
 }
+
+

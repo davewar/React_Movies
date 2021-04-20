@@ -32,7 +32,11 @@ const Navbar = () => {
   }, [value, history]);
 
   return (
+    <>
+     
+
     <BottomNavigation
+      
       value={value}
       onChange={(event, newValue) => {
         setValue(newValue);
@@ -52,7 +56,10 @@ const Navbar = () => {
             label="Search"
             icon={<SearchIcon />}
           />
+         
     </BottomNavigation>
+
+    </>
   );
 }
 

@@ -7,7 +7,7 @@ const Header = () => {
   // console.log(location.pathname)
   return (
     <span onClick={() => window.scroll(0, 0)} className="header">
-                {location.pathname ==="/" ? "Movies" : "Movies / TV search"}
+                {location.pathname ==="/" ? "Films" : "Films - TV "}
     </span>
   );
 };

@@ -27,10 +27,11 @@
   padding: 4px;
   border-radius: 50px;
   color: white;
+  margin:2px;
 }
 
 @media (max-width: 1000px) {
   .pageTitle {
-    font-size: 6.4vw;
+    font-size: 4.4vw;
   }
 }

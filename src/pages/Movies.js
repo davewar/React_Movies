@@ -37,6 +37,10 @@ const Movies = () => {
         //getdata
         const fetchData = async ()=>{
 
+            // reset - if selecting a lot genres, there are no items then when unclicking gentres we need to reset error message
+            setError(false)
+            
+
             try{
 
                 // const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${page}`)

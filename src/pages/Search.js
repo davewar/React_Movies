@@ -45,9 +45,12 @@ const Search = () => {
 
               if(!setSearchText){
                 setData([])
-                setError("")
+                setError(false)
                 return
               }
+
+              // reset - if selecting a lot genres, there are no items then when unclicking gentres we need to reset error message
+            setError(false)
 
             try{
 
